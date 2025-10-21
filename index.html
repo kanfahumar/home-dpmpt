@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tautan Penting - DPMPTSP Gunungkidul</title>
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --light-color: #ecf0f1;
+      --dark-color: #2c3e50;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--light-color);
+    }
+    
+    .overlay {
+      width: 100%;
+      max-width: 800px;
+    }
+    
+    .main-card {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 120px;
+      height: auto;
+      
+    }
+    
+    h4, h5 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    
+    h4 {
+      color: var(--light-color);
+      margin-bottom: 30px;
+    }
+    
+    h5 {
+      color: var(--secondary-color);
+    }
+    
+    .links-container {
+      margin-bottom: 30px;
+    }
+    
+    .link-group {
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    .btn-parent {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 12px;
+      padding: 15px 20px;
+      width: 100%;
+      text-decoration: none;
+      color: var(--light-color);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-parent::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .btn-parent:hover::before {
+      left: 100%;
+    }
+    
+    .btn-parent:hover {
+      background-color: rgba(52, 152, 219, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-parent.active {
+      background-color: rgba(52, 152, 219, 0.3);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    .parent-content {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+    
+    .icon-container {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-parent:hover .icon-container {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-parent i {
+      font-size: 1.2rem;
+      color: white;
+    }
+    
+    .btn-text {
+      flex: 1;
+      text-align: left;
+      font-weight: 500;
+    }
+    
+    .expand-icon {
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .btn-parent.active .expand-icon {
+      transform: rotate(180deg);
+    }
+    
+    .sub-links {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background-color: rgba(255, 255, 255, 0.05);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+    
+    .btn-parent.active + .sub-links {
+      max-height: 500px;
+    }
+    
+    .btn-child {
+      display: flex;
+      align-items: center;
+      background-color: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px 12px 65px;
+      margin: 2px 5px;
+      width: calc(100% - 10px);
+      text-decoration: none;
+      color: var(--light-color);
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-child::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--secondary-color);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .btn-child:hover {
+      background-color: rgba(52, 152, 219, 0.15);
+      color: white;
+      padding-left: 70px;
+    }
+    
+    .btn-child:hover::before {
+      transform: scaleY(1);
+    }
+    
+    .btn-child i {
+      font-size: 1rem;
+      margin-right: 10px;
+      color: var(--secondary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-child:hover i {
+      transform: scale(1.2);
+      color: #fff;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    footer p {
+      margin-bottom: 5px;
+    }
+    
+    /* Animasi untuk elemen yang muncul */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .link-group {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+    
+    .link-group:nth-child(1) { animation-delay: 0.1s; }
+    .link-group:nth-child(2) { animation-delay: 0.2s; }
+    .link-group:nth-child(3) { animation-delay: 0.3s; }
+    .link-group:nth-child(4) { animation-delay: 0.4s; }
+    
+    /* Efek ripple untuk tombol */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+    
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+      .main-card {
+        padding: 20px;
+      }
+      
+      .btn-parent {
+        padding: 12px 15px;
+      }
+      
+      .btn-child {
+        padding-left: 55px;
+      }
+      
+      .btn-child:hover {
+        padding-left: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="main-card">
+      <!-- Logo -->
+      <img src="assets/logo.png" alt="Logo DPMPTSP" class="logo">
+
+      <!-- Title -->
+      <h5>Dokumen dan Tautan Penting</h5>
+      <h4>DPMPTSP Kabupaten Gunungkidul</h4>
+
+      <!-- Daftar Link dengan Pengelompokan Expandable -->
+      <div class="links-container">
+        <!-- Kelompok 1: Dokumen Aktualisasi -->
+        <div class="link-group">
+          <div class="btn-parent" data-target="group1">
+            <div class="parent-content">
+              <div class="icon-container">
+                <i class="bi bi-ui-radios"></i>
+              </div>
+              <span class="btn-text">Formulir Digital</span>
+            </div>
+            <i class="bi bi-chevron-down expand-icon"></i>
+          </div>
+          <div class="sub-links" id="group1">
+            <a href="https://script.google.com/macros/s/AKfycbx7cLfg1Ys1qMMwv7JFvZrw9-XIIhcH1gWwPNlHU6WzgRrViBAx1QqW7ThOMdr5P-RzIg/exec" class="btn-child">
+              <i class="bi bi-send-check-fill"></i>
+              <span>Formulir Ekspedisi Dokumen/Surat</span>
+            </a>
+            <a href="https://dpmptsp-gunungkidul.vercel.app/newform.html" class="btn-child">
+              <i class="bi bi-file-text"></i>
+              <span>Formulir Kepeminatan Investasi</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Kelompok 2: Dokumen Seminar dan Konsultasi -->
+        <div class="link-group">
+          <div class="btn-parent" data-target="group2">
+            <div class="parent-content">
+              <div class="icon-container">
+                <i class="bi bi-database-check"></i>
+              </div>
+              <span class="btn-text">Database</span>
+            </div>
+            <i class="bi bi-chevron-down expand-icon"></i>
+          </div>
+          <div class="sub-links" id="group2">
+            <a href="https://docs.google.com/spreadsheets/d/1voLOD8V8rqTs7dAE_U4i43YSK2t2y12KmJGROCn8QXY/edit?usp=sharing" class="btn-child">
+              <i class="bi bi-journal-check"></i>
+              <span>Database Ekspedisi</span>
+            </a>
+            <a href="https://docs.google.com/spreadsheets/d/17GDaSRDjcP617eAfubFbhxTz6e4MG8JX_anAPpdYbZQ/edit?usp=sharing" class="btn-child">
+              <i class="bi bi-people"></i>
+              <span>Database Formulir Kepeminatan Investasi</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Kelompok 3: Dokumen Evaluasi dan Revisi -->
+        <div class="link-group">
+          <div class="btn-parent" data-target="group3">
+            <div class="parent-content">
+              <div class="icon-container">
+                <i class="bi bi-chat-left-text"></i>
+              </div>
+              <span class="btn-text">Bukti Dukung SKP</span>
+            </div>
+            <i class="bi bi-chevron-down expand-icon"></i>
+          </div>
+          <div class="sub-links" id="group3">
+            <a href="embed.html?src=https://drive.google.com/file/d/1oBSTM0G7mWHzWw0blPpIIVD0RKBgfULq/view?usp=drive_link&title=Lembar Catatan Penguji & Coach" class="btn-child">
+              <i class="bi bi-x-diamond-fill"></i>
+              <span>Bidang Pengembangan Investasi</span>
+            </a>
+            <a href="embed.html?src=https://drive.google.com/file/d/1IBzfFpD26Blzf8n2AZ0Ju27FmxxvcRHi/view?usp=drive_link&title=Lembar Komitmen Revisi" class="btn-child">
+              <i class="bi bi-shop"></i>
+              <span>Bidang Promosi PM</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Kelompok 4: Presentasi dan Media -->
+        <div class="link-group">
+          <div class="btn-parent" data-target="group4">
+            <div class="parent-content">
+              <div class="icon-container">
+                <i class="bi bi-browser-edge"></i>
+              </div>
+              <span class="btn-text">Halaman Admin</span>
+            </div>
+            <i class="bi bi-chevron-down expand-icon"></i>
+          </div>
+          <div class="sub-links" id="group4">
+            <a href="embed.html?src=https://docs.google.com/presentation/d/145Txi56decupG8O_GGPcJan9MEKT5ZY4/edit?usp=sharing&title=Slide Presentasi RA" class="btn-child">
+              <i class="bi bi-person-rolodex"></i>
+              <span>Admin TTD</span>
+            </a>
+            <a href="https://prezi.com/view/XKxZVhlIsoBeTO10mtBF/?referral_token=9RRZ2tlnB3FN" class="btn-child">
+              <i class="bi bi-cash-coin"></i>
+              <span>Bendahara</span>
+            </a>
+            <a href="https://youtu.be/eWgEoGwUB0k" class="btn-child">
+              <i class="bi bi-person-check"></i>
+              <span>Pengadaan</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        <p>Jalan Kesatrian 38 Wonosari, Gunungkidul</p>
+        <p>© 2025 DPMPTSP Kabupaten Gunungkidul</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const parentButtons = document.querySelectorAll('.btn-parent');
+      
+      // Tambah efek ripple
+      parentButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          // Efek ripple
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.classList.add('ripple');
+          
+          this.appendChild(ripple);
+          
+          // Hapus ripple setelah animasi selesai
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+          
+          // Toggle menu
+          const targetId = this.getAttribute('data-target');
+          const subLinks = document.getElementById(targetId);
+          
+          // Toggle active class on button
+          this.classList.toggle('active');
+          
+          // Close other open groups
+          parentButtons.forEach(otherButton => {
+            if (otherButton !== this) {
+              otherButton.classList.remove('active');
+              const otherTargetId = otherButton.getAttribute('data-target');
+              const otherSubLinks = document.getElementById(otherTargetId);
+              if (otherSubLinks) {
+                otherSubLinks.style.maxHeight = '0';
+              }
+            }
+          });
+          
+          // Toggle current group
+          if (this.classList.contains('active')) {
+            subLinks.style.maxHeight = subLinks.scrollHeight + 'px';
+          } else {
+            subLinks.style.maxHeight = '0';
+          }
+        });
+      });
+      
+      // Animasi untuk child links saat muncul
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      };
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+      
+      document.querySelectorAll('.btn-child').forEach(child => {
+        child.style.opacity = '0';
+        child.style.transform = 'translateY(10px)';
+        child.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        observer.observe(child);
+      });
+    });
+  </script>
+</body>
+</html>

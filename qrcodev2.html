@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .qr-container {
+            display: none;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            max-width: 100%;
+        }
+
+        #qrcode canvas,
+        #qrcode img {
+            max-width: 100% !important;
+            height: auto !important;
+            border-radius: 8px;
+        }
+
+        .qr-label {
+            margin-top: 12px;
+            color: #666;
+            font-size: 12px;
+            word-break: break-all;
+            padding: 0 10px;
+        }
+
+        .style-selector {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .style-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .style-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .style-option {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            background: white;
+        }
+
+        .style-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .style-option.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .style-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            display: none;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(17, 153, 142, 0.4);
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        canvas#downloadCanvas {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 12px;
+            }
+
+            .style-options {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .style-option {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+
+            .style-icon {
+                font-size: 20px;
+            }
+
+            #qrcode {
+                padding: 10px;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 QR Code Generator</h1>
+        <p class="subtitle">Buat QR Code dari link Anda secara gratis</p>
+        
+        <div class="input-group">
+            <label for="urlInput">Masukkan Link atau URL</label>
+            <input 
+                type="text" 
+                id="urlInput" 
+                placeholder="https://example.com"
+                autocomplete="off"
+            >
+            <span class="error" id="errorMsg">Mohon masukkan URL yang valid</span>
+        </div>
+
+        <button class="btn btn-generate" onclick="generateQR()">
+            Generate QR Code
+        </button>
+
+        <div class="qr-container" id="qrContainer">
+            <div id="qrcode"></div>
+            <div class="qr-label" id="qrLabel"></div>
+        </div>
+
+        <div class="style-selector" id="styleSelector">
+            <label class="style-label">Pilih Style Download:</label>
+            <div class="style-options">
+                <div class="style-option active" onclick="selectStyle('basic')" data-style="basic">
+                    <div class="style-icon">⬛</div>
+                    <div>Basic</div>
+                </div>
+                <div class="style-option" onclick="selectStyle('rounded')" data-style="rounded">
+                    <div class="style-icon">🔲</div>
+                    <div>Rounded</div>
+                </div>
+                <div class="style-option" onclick="selectStyle('colorful')" data-style="colorful">
+                    <div class="style-icon">🎨</div>
+                    <div>Colorful</div>
+                </div>
+                <div class="style-option" onclick="selectStyle('framed')" data-style="framed">
+                    <div class="style-icon">🖼️</div>
+                    <div>Framed</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-download" id="downloadBtn" onclick="downloadQR()">
+            💾 Download PNG
+        </button>
+    </div>
+
+    <canvas id="downloadCanvas"></canvas>
+
+    <script>
+        let qrCodeInstance = null;
+        let currentStyle = 'basic';
+        let currentUrl = '';
+
+        function isValidURL(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function selectStyle(style) {
+            currentStyle = style;
+            document.querySelectorAll('.style-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            document.querySelector(`[data-style="${style}"]`).classList.add('active');
+        }
+
+        function generateQR() {
+            const input = document.getElementById('urlInput');
+            const url = input.value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+            const qrContainer = document.getElementById('qrContainer');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const styleSelector = document.getElementById('styleSelector');
+            const qrLabel = document.getElementById('qrLabel');
+            const qrcodeDiv = document.getElementById('qrcode');
+
+            errorMsg.style.display = 'none';
+
+            if (!url) {
+                errorMsg.textContent = 'Mohon masukkan URL';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (!isValidURL(url)) {
+                errorMsg.textContent = 'Mohon masukkan URL yang valid (contoh: https://example.com)';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            currentUrl = url;
+            qrcodeDiv.innerHTML = '';
+
+            qrCodeInstance = new QRCode(qrcodeDiv, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            qrContainer.style.display = 'block';
+            styleSelector.style.display = 'block';
+            downloadBtn.style.display = 'block';
+            qrLabel.textContent = url;
+        }
+
+        function downloadQR() {
+            const qrcodeDiv = document.getElementById('qrcode');
+            const originalCanvas = qrcodeDiv.querySelector('canvas');
+            
+            if (!originalCanvas) return;
+
+            const canvas = document.getElementById('downloadCanvas');
+            const ctx = canvas.getContext('2d');
+
+            let finalWidth, finalHeight, padding, cornerRadius;
+
+            switch(currentStyle) {
+                case 'basic':
+                    canvas.width = 256;
+                    canvas.height = 256;
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(originalCanvas, 0, 0);
+                    break;
+
+                case 'rounded':
+                    padding = 40;
+                    cornerRadius = 30;
+                    canvas.width = 256 + padding * 2;
+                    canvas.height = 256 + padding * 2;
+                    
+                    ctx.fillStyle = 'white';
+                    roundRect(ctx, 0, 0, canvas.width, canvas.height, cornerRadius);
+                    ctx.fill();
+                    
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+                    ctx.shadowBlur = 20;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 10;
+                    
+                    ctx.drawImage(originalCanvas, padding, padding);
+                    break;
+
+                case 'colorful':
+                    padding = 40;
+                    canvas.width = 256 + padding * 2;
+                    canvas.height = 256 + padding * 2;
+                    
+                    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                    gradient.addColorStop(0, '#667eea');
+                    gradient.addColorStop(1, '#764ba2');
+                    ctx.fillStyle = gradient;
+                    roundRect(ctx, 0, 0, canvas.width, canvas.height, 30);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = 'white';
+                    roundRect(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 20);
+                    ctx.fill();
+                    
+                    ctx.drawImage(originalCanvas, padding, padding);
+                    break;
+
+                case 'framed':
+                    padding = 50;
+                    const textHeight = 60;
+                    canvas.width = 256 + padding * 2;
+                    canvas.height = 256 + padding * 2 + textHeight;
+                    
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    ctx.strokeStyle = '#667eea';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(padding - 10, padding - 10, 276, 276);
+                    
+                    ctx.drawImage(originalCanvas, padding, padding);
+                    
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Scan Me!', canvas.width / 2, 256 + padding + 30);
+                    
+                    ctx.font = '11px Arial';
+                    ctx.fillStyle = '#666';
+                    const shortUrl = currentUrl.length > 40 ? currentUrl.substring(0, 40) + '...' : currentUrl;
+                    ctx.fillText(shortUrl, canvas.width / 2, 256 + padding + 48);
+                    break;
+            }
+
+            const url = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `qrcode-${currentStyle}.png`;
+            link.href = url;
+            link.click();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateQR();
+            }
+        });
+    </script>
+</body>
+</html>
